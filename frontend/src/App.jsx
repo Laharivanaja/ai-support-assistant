@@ -3,7 +3,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import './App.css';
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "/api";
 
 function App() {
   const [messages, setMessages] = useState([]);
