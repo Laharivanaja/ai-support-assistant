@@ -48,7 +48,6 @@ function App() {
     try {
       const res = await axios.get(`${API_BASE}/conversations/${id}`);
 
-      // ✅ FIX: Ensure messages is ALWAYS an array
       const data = res.data;
       const chatMessages = Array.isArray(data)
         ? data
@@ -122,9 +121,7 @@ function App() {
           {sessions.map((s) => (
             <div
               key={s.id}
-              className={`session-item ${
-                s.id === sessionId ? "active" : ""
-              }`}
+              className={`session-item ${s.id === sessionId ? "active" : ""}`}
               onClick={() => loadSessionData(s.id)}
             >
               <div>Session: {s.id.substring(0, 8)}...</div>
@@ -140,35 +137,37 @@ function App() {
 
       {/* CHAT AREA */}
       <div className="chat-container">
-        <header>
-          <h2>Support Bot</h2>
-          <small>ID: {sessionId.substring(0, 8)}</small>
-        </header>
+        <div className="chat-card">
+          <header>
+            <h2>Support Bot</h2>
+            <small>ID: {sessionId.substring(0, 8)}</small>
+          </header>
 
-        <div className="message-list">
-          {messages.map((m, i) => (
-            <div key={i} className={`message ${m.role}`}>
-              <div className="bubble">{m.content}</div>
-            </div>
-          ))}
+          <div className="message-list">
+            {messages.map((m, i) => (
+              <div key={i} className={`message ${m.role}`}>
+                <div className="bubble">{m.content}</div>
+              </div>
+            ))}
 
-          {loading && (
-            <div className="message assistant">
-              <div className="bubble italic">Searching docs...</div>
-            </div>
-          )}
+            {loading && (
+              <div className="message assistant">
+                <div className="bubble italic">Searching docs...</div>
+              </div>
+            )}
 
-          <div ref={scrollRef} />
+            <div ref={scrollRef} />
+          </div>
+
+          <form onSubmit={sendMessage} className="input-area">
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask a question..."
+            />
+            <button type="submit">Send</button>
+          </form>
         </div>
-
-        <form onSubmit={sendMessage} className="input-area">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask a question..."
-          />
-          <button type="submit">Send</button>
-        </form>
       </div>
     </div>
   );
